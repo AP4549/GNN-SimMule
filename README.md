@@ -6,6 +6,15 @@ A sophisticated Graph Neural Network (GNN) simulator designed for financial risk
 
 GNN-SimMule leverages modern GNN architectures to model financial transactions as a graph topology. Unlike traditional linear analysis, it utilizes **Message Passing (GNN-MP)** to propagate risk signals through the network, exposing latent connections and surfacing clusters of suspicious activity.
 
+
+<img width="1903" height="803" alt="image" src="https://github.com/user-attachments/assets/f49363e5-3a0e-4864-bc91-85861e813953" />
+- Multiple Scenarios
+<img width="1901" height="834" alt="image" src="https://github.com/user-attachments/assets/44fae534-6503-40f7-9fde-27d9fd6765f1" />
+- Intuitive UX, Animated steps for clarity
+<img width="1893" height="758" alt="image" src="https://github.com/user-attachments/assets/8e9c49a3-9468-4727-ac08-d7cf11375435" />
+- Output after GNN processing 
+<img width="1869" height="823" alt="image" src="https://github.com/user-attachments/assets/9e0407b1-5531-40e1-9492-0f4009936cb7" />
+
 ## Key Features
 
 - **Neural Intelligence Engine**: Proprietary risk propagation logic (Generate, Aggregate, Update).
