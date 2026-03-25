@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 230 15% 3%;
+    --foreground: 210 20% 98%;
+
+    --card: 230 15% 4%;
+    --card-foreground: 210 20% 98%;
+
+    --popover: 230 15% 4%;
+    --popover-foreground: 210 20% 98%;
+
+    --primary: 180 100% 45%;
+    --primary-foreground: 230 15% 4%;
+
+    --secondary: 270 100% 60%;
+    --secondary-foreground: 210 20% 98%;
+
+    --muted: 230 15% 10%;
+    --muted-foreground: 210 10% 65%;
+
+    --accent: 210 100% 50%;
+    --accent-foreground: 210 20% 98%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 230 15% 12%;
+    --input: 230 15% 12%;
+    --ring: 180 100% 45%;
+
+    --radius: 1rem;
+
+    --sidebar-background: 230 15% 2%;
+    --sidebar-foreground: 210 10% 90%;
+    --sidebar-primary: 180 100% 45%;
+    --sidebar-primary-foreground: 230 15% 2%;
+    --sidebar-accent: 230 15% 8%;
+    --sidebar-accent-foreground: 210 20% 98%;
+    --sidebar-border: 230 15% 10%;
+    --sidebar-ring: 180 100% 45%;
+  }
+
+  .dark {
+    --background: 230 15% 2%;
+    --foreground: 210 20% 98%;
+    /* Dark mode is the primary mode for neo-finance, so it mirrors root/dark usually */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+    background-image: 
+      radial-gradient(at 0% 0%, hsla(180, 100%, 50%, 0.03) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, hsla(270, 100%, 60%, 0.03) 0px, transparent 50%);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display uppercase tracking-widest;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/[0.02] backdrop-blur-xl border border-white/[0.05] shadow-2xl;
+  }
+  
+  .glass-card {
+    @apply bg-white/[0.03] backdrop-blur-md border border-white/[0.08] hover:bg-white/[0.05] transition-all duration-300;
+  }
+
+  .neo-glow-cyan {
+    box-shadow: 0 0 20px hsla(180, 100%, 50%, 0.15), inset 0 0 10px hsla(180, 100%, 50%, 0.05);
+  }
+
+  .neo-glow-purple {
+    box-shadow: 0 0 20px hsla(270, 100%, 60%, 0.15), inset 0 0 10px hsla(270, 100%, 60%, 0.05);
+  }
+
+  .text-shadow-cyan {
+    text-shadow: 0 0 10px hsla(180, 100%, 50%, 0.5);
+  }
+
+  .text-shadow-purple {
+    text-shadow: 0 0 10px hsla(270, 100%, 60%, 0.5);
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary;
+}
+
+/* Phase badges */
+.phase-badge {
+  @apply px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-tighter;
+}
+.phase-idle { @apply bg-muted text-muted-foreground; }
+.phase-generate { @apply bg-neo-cyan text-black; box-shadow: 0 0 10px rgba(0, 242, 255, 0.3); }
+.phase-aggregate { @apply bg-neo-purple text-white; box-shadow: 0 0 10px rgba(112, 0, 255, 0.3); }
+.phase-update { @apply bg-neo-green text-black; box-shadow: 0 0 10px rgba(0, 255, 112, 0.3); }
+.phase-analyze { @apply bg-neo-blue text-white; box-shadow: 0 0 10px rgba(0, 112, 255, 0.3); }
