@@ -14,9 +14,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['Oswald', 'sans-serif'],
-        body: ['Inter', 'sans-serif'],
+        display: ['Quantico', 'sans-serif'],
+        body: ['Outfit', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
+        neue: ['Base Neue', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -58,6 +59,9 @@ export default {
           pink: "#E85D75",
           green: "#5FA85F",
           blue: "#3B82F6",
+          lime: "#BFFF00",
+          charcoal: "#0a0a0a",
+          darkCharcoal: "#1a1a1a",
         },
       },
       borderRadius: {

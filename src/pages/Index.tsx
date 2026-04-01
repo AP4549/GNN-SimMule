@@ -30,15 +30,15 @@ const Index = () => {
   return (
     <div className={`min-h-screen flex bg-background text-foreground font-sans selection:bg-primary/30 selection:text-primary overflow-hidden ${darkMode ? 'dark' : 'light'}`}>
       {/* Premium Sidebar */}
-      <aside className="w-64 glass-panel border-r flex flex-col z-20">
+      <aside className="w-64 glass-panel border-r-2 border-primary/40 flex flex-col z-20 bg-background">
         <div className="p-6 flex flex-col h-full">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center shadow-lg border-2 border-primary/30">
-              <Shield className="w-6 h-6 text-primary-foreground" />
+            <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center shadow-lg border-2 border-primary neo-glow-cyan">
+              <Shield className="w-6 h-6 text-primary-foreground font-bold" />
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-bold tracking-tighter text-shadow-cyan">NEO RISK LAB</span>
-              <span className="text-[10px] text-muted-foreground font-mono uppercase tracking-widest">GNN SIMULATOR</span>
+              <span className="text-sm font-bold tracking-widest text-primary" style={{ fontFamily: 'Quantico, sans-serif' }}>SYSTEM</span>
+              <span className="text-[10px] text-muted-foreground font-mono uppercase tracking-widest">CORRUPT</span>
             </div>
           </div>
 
@@ -50,10 +50,10 @@ const Index = () => {
                   <button
                     key={key}
                     onClick={() => { setScenario(key); setAnalysisData(null); }}
-                    className={`w-full text-left px-4 py-3 rounded-lg text-xs transition-all duration-300 flex items-center justify-between group font-medium border-2 ${
+                    className={`w-full text-left px-4 py-3 rounded-lg text-xs transition-all duration-300 flex items-center justify-between group font-medium border-2 uppercase ${
                       key === scenario
-                        ? 'bg-primary/10 text-primary border-primary/40 neo-glow-cyan'
-                        : 'text-muted-foreground border-transparent hover:bg-white/5 hover:text-foreground'
+                        ? 'bg-primary/20 text-primary border-primary/60 neo-glow-cyan shadow-lg'
+                        : 'text-muted-foreground border-muted/40 hover:bg-primary/10 hover:text-primary hover:border-primary/40'
                     }`}
                   >
                     <span className="tracking-tight">{s.name}</span>
@@ -81,9 +81,9 @@ const Index = () => {
           <div className="pt-6 border-t border-border flex flex-col gap-4">
              <button
                 onClick={() => setDarkMode((v) => !v)}
-                className="w-full px-4 py-2.5 rounded-lg text-[10px] font-bold tracking-widest uppercase border-2 border-primary/40 text-primary hover:bg-primary/10 transition-all duration-300 neo-glow-cyan"
+                className="w-full px-4 py-2.5 rounded-lg text-[10px] font-bold tracking-widest uppercase border-2 border-primary/60 text-primary bg-primary/10 hover:bg-primary/20 transition-all duration-300 neo-glow-cyan shadow-lg"
               >
-                {darkMode ? '◐ DARK' : '◑ LIGHT'}
+                {darkMode ? '█ SYSTEM CORRUPT' : '█ LIGHT MODE'}
               </button>
             <p className="text-[10px] text-muted-foreground/50 font-mono text-center">© 2026 SimMule v1.0.4</p>
           </div>
@@ -91,11 +91,11 @@ const Index = () => {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col relative z-10">
+      <div className="flex-1 flex flex-col relative z-10 bg-gradient-to-br from-background via-background to-black/40">
         {/* Top Header */}
         <header className="h-16 px-8 flex items-center justify-between border-b border-border bg-background/50 backdrop-blur-md">
           <div className="flex items-center gap-4">
-            <h1 className="text-lg font-bold tracking-tighter text-shadow-cyan">{sc?.name}</h1>
+            <h1 className="text-lg font-bold tracking-widest text-primary" style={{ fontFamily: 'Quantico, sans-serif', fontSize: '1.5rem' }}>DETECT: {sc?.name}</h1>
             <div className="h-4 w-[1px] bg-border" />
             <p className="text-xs text-muted-foreground max-w-md line-clamp-1">{sc?.description}</p>
           </div>
@@ -217,8 +217,8 @@ const Index = () => {
 
               <div className="relative z-10 space-y-8">
                 <header className="border-b border-border pb-4">
-                  <h2 className="text-2xl font-bold tracking-tighter mb-2 text-shadow-cyan">Neural Intelligence Framework</h2>
-                  <p className="text-sm text-muted-foreground">Graph Neural Network Protocol for Financial Risk Analysis</p>
+                  <h2 className="text-2xl font-bold tracking-widest mb-2 text-primary" style={{ fontFamily: 'Quantico, sans-serif' }}>SYSTEM ANALYZE</h2>
+                  <p className="text-sm text-muted-foreground">Neural Network Detection & Forensic Analysis Protocol</p>
                 </header>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
