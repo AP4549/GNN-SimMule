@@ -637,26 +637,26 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
     <div className="flex flex-col h-full relative overflow-hidden bg-background/30">
       {/* HUD Info Overlay */}
       <div className="absolute top-6 left-6 z-10 flex flex-col gap-3">
-        <div className="glass-panel p-5 flex flex-col gap-4 rounded-lg border-2 border-border">
+        <div className="bg-background p-5 flex flex-col gap-4 border-4 border-border">
           <div className="flex items-center gap-6">
             <div className="flex flex-col gap-1.5">
-              <span className="text-[9px] font-mono font-bold text-primary tracking-[0.2em] uppercase">Propagation Weight</span>
+              <span className="text-[9px] font-mono font-bold text-foreground tracking-widest uppercase">Weight</span>
               <div className="flex items-center gap-3">
                 <input type="range" min="0.1" max="1.0" step="0.1" value={weight}
                   onChange={e => setWeight(parseFloat(e.target.value))}
-                  className="w-24 h-1 accent-primary bg-muted/30 rounded-full appearance-none cursor-pointer" />
-                <span className="text-xs font-mono text-primary font-bold w-6">{weight.toFixed(1)}</span>
+                  className="w-24 h-2 accent-primary bg-border appearance-none cursor-pointer" />
+                <span className="text-xs font-mono text-foreground font-bold w-6">{weight.toFixed(1)}</span>
               </div>
             </div>
             
             <div className="w-[1px] h-8 bg-border mx-1"></div>
 
             <div className="flex flex-col gap-2">
-              <span className="text-[9px] font-mono font-bold text-muted-foreground tracking-[0.2em] uppercase">Aggregator</span>
-              <div className="flex gap-1 p-1 bg-muted/20 rounded-lg border border-border">
+              <span className="text-[9px] font-mono font-bold text-foreground tracking-widest uppercase">AGGS</span>
+              <div className="flex gap-1 p-1 bg-muted border-2 border-border">
                 {(['SUM', 'MAX', 'MEAN'] as const).map(a => (
                   <button key={a} onClick={() => setAggregation(a)}
-                    className={`px-3 py-1 text-[9px] font-bold rounded transition-all border ${aggregation === a ? 'bg-primary text-primary-foreground border-primary neo-glow-cyan' : 'text-muted-foreground border-transparent hover:text-foreground hover:border-primary/30'}`}>
+                    className={`px-3 py-1 text-[9px] font-bold border-2 transition-none ${aggregation === a ? 'bg-primary text-primary-foreground border-border' : 'bg-background text-foreground border-border hover:bg-muted'}`}>
                     {a}
                   </button>
                 ))}
@@ -666,46 +666,45 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
         </div>
 
         {/* Phase Indicator */}
-        <div className="glass-panel px-4 py-3 flex items-center gap-4 w-fit rounded-lg border-2 border-border">
-          <div className={`w-2 h-2 rounded-full animate-pulse ${isAnimating ? 'bg-primary' : 'bg-muted-foreground'}`} />
-          <span className="text-[10px] font-mono font-bold tracking-widest text-foreground/90 uppercase">{phaseLabel[phase]}</span>
+        <div className="bg-background px-4 py-3 flex items-center gap-4 w-fit border-4 border-border">
+          <div className={`w-3 h-3 ${isAnimating ? 'bg-primary' : 'bg-muted-foreground'}`} />
+          <span className="text-[10px] font-mono font-bold tracking-widest text-foreground uppercase">{phaseLabel[phase]}</span>
           <div className="w-[1px] h-3 bg-border"></div>
-          <span className="text-[10px] font-mono text-primary font-bold">L{layer}</span>
+          <span className="text-[10px] font-mono text-foreground font-bold">L{layer}</span>
         </div>
       </div>
 
       {/* Floating Action Bar (Bottom Center) */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex items-center gap-4">
         <button onClick={handleReset}
-          className="p-4 glass-panel text-muted-foreground rounded-lg border-2 border-border hover:text-primary transition-all group active:scale-95">
+          className="p-4 bg-background text-foreground border-4 border-border hover:bg-muted transition-none group active:scale-95">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:rotate-180 transition-transform duration-700"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
         </button>
         
         <button onClick={runNextPhase} disabled={isAnimating}
-          className={`flex items-center gap-4 px-10 py-4 font-bold uppercase tracking-[0.2em] text-xs rounded-lg shadow-lg transition-all relative overflow-hidden group border-2 ${
+          className={`flex items-center gap-4 px-10 py-4 font-bold uppercase tracking-widest text-xs transition-none relative overflow-hidden group border-4 ${
             isAnimating 
-              ? 'bg-muted/50 text-muted-foreground cursor-not-allowed border-muted/30' 
-              : 'bg-primary text-primary-foreground hover:scale-105 active:scale-95 neo-glow-cyan border-primary/50'
+              ? 'bg-muted text-foreground cursor-not-allowed border-border' 
+              : 'bg-primary text-primary-foreground border-border hover:bg-accent active:scale-95'
           }`}>
-          <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-          <span className="relative z-10">{isAnimating ? 'Processing' : (phase === 'IDLE' ? 'Execute' : 'Next')}</span>
+          <span className="relative z-10">{isAnimating ? 'RUNNING' : (phase === 'IDLE' ? 'EXECUTE' : 'NEXT')}</span>
           {!isAnimating && (
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="relative z-10"><path d="m9 18 6-6-6-6"/></svg>
           )}
         </button>
 
         <button onClick={toggleAutoPlay}
-          className={`px-8 py-4 font-bold uppercase tracking-[0.2em] text-[10px] rounded-lg border-2 transition-all active:scale-95 ${
+          className={`px-8 py-4 font-bold uppercase tracking-widest text-[10px] border-4 transition-none active:scale-95 ${
             isAutoPlaying 
-              ? 'bg-secondary/15 text-secondary border-secondary/40 neo-glow-purple' 
-              : 'glass-panel text-muted-foreground border-border hover:border-primary/50 hover:text-primary'
+              ? 'bg-secondary text-secondary-foreground border-border' 
+              : 'bg-background text-foreground border-border hover:bg-muted'
           }`}>
           {isAutoPlaying ? 'STOP' : 'AUTO'}
         </button>
       </div>
 
       {/* Canvas Area */}
-      <div ref={containerRef} className="flex-1 relative overflow-hidden rounded-2xl m-4 border-2 border-border bg-muted/10">
+      <div ref={containerRef} className="flex-1 relative overflow-hidden m-4 border-4 border-border bg-background">
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none" 
              style={{ 
                backgroundImage: 'radial-gradient(circle at 2px 2px, hsla(180, 100%, 50%, 0.5) 1px, transparent 0)', 
