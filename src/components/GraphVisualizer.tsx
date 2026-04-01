@@ -144,7 +144,7 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
     const sc = SCENARIOS[scenario];
     s.messages = generateMessages(s.nodes, s.edges, s.weight);
     s.particles = [];
-    s.messages.forEach((msg) => {
+      s.messages.forEach((msg) => {
       const srcNode = s.nodes.find(n => n.id === msg.source);
       const tgtNode = s.nodes.find(n => n.id === msg.target);
       if (!srcNode || !tgtNode) return;
@@ -154,7 +154,7 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
       s.particles.push({
         sx: srcScene.x, sy: srcScene.y, ex: tgtScene.x, ey: tgtScene.y,
         progress: 0, value: msg.value,
-        color: msg.value >= 5 ? '#ff0070' : msg.value >= 3 ? '#7000ff' : '#00f2ff'
+        color: msg.value >= 5 ? '#E85D75' : msg.value >= 3 ? '#8B6BC4' : '#4DB8D8'
       });
     });
   }, [scenario]);
@@ -300,8 +300,10 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
 
     const drawNode = (x: number, y: number, node: NodeState, hovered: boolean, focused: boolean) => {
       const risk = node.displayRisk !== undefined ? node.displayRisk : node.currentRisk;
-      const themeColor = risk >= 8.0 ? '#ff0070' : risk >= 5.0 ? '#7000ff' : '#00f2ff';
-      const secondaryColor = risk >= 8.0 ? '#ff4090' : risk >= 5.0 ? '#9040ff' : '#40ffff';
+      // Use COLOR from TYPE_COLORS or fallback to risk-based color
+      const nodeColor = TYPE_COLORS[node.type] || (risk >= 8.0 ? '#E85D75' : risk >= 5.0 ? '#8B6BC4' : '#4DB8D8');
+      const themeColor = nodeColor;
+      const secondaryColor = nodeColor;
       
       // 1. External Glow (Aura)
       if (risk >= 5.0 || hovered || focused) {
@@ -345,10 +347,11 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
       ctx.stroke();
       ctx.restore();
 
-      // 4. Focal Inner Shield
+      // 4. Focal Inner Shield (adaptive background)
       ctx.beginPath();
       ctx.arc(x, y, NODE_R - 3, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(2, 6, 23, 0.8)'; 
+      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches || !document.documentElement.classList.contains('light');
+      ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.85)' : 'rgba(240, 245, 250, 0.85)'; 
       ctx.fill();
 
       // 5. Identity Badge
@@ -366,14 +369,15 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
       ctx.stroke();
       ctx.globalAlpha = 1;
       
-      ctx.fillStyle = '#ffffff';
+      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches || !document.documentElement.classList.contains('light');
+      ctx.fillStyle = isDark ? '#ffffff' : '#1a202c';
       ctx.font = '800 10px Inter, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(node.id.substring(0, 1).toUpperCase(), bx, by);
 
       // 6. Central Metric (The Score)
-      ctx.fillStyle = focused ? '#ffffff' : themeColor;
+      ctx.fillStyle = focused ? (isDark ? '#ffffff' : '#000000') : themeColor;
       ctx.font = '700 14px "JetBrains Mono", monospace';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -381,7 +385,7 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
 
       // 7. Small Label underneath
       if (hovered || focused) {
-        ctx.fillStyle = '#ffffff';
+        ctx.fillStyle = isDark ? '#ffffff' : '#1a202c';
         ctx.font = '600 9px Inter, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(node.label.toUpperCase(), x, y + NODE_R + 14);
@@ -462,25 +466,27 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
 
       // Aggregate labels
       if (s.phase === 'AGGREGATE') {
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches || !document.documentElement.classList.contains('light');
+        ctx.fillStyle = isDark ? '#fbbf24' : '#b45309'; ctx.font = 'bold 11px Inter, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
         for (const node of s.nodes) {
           const p = cpos[node.id]; if (!p) continue;
           const agg = s.aggregatedMsgs[node.id];
           if (!agg) continue;
-          ctx.fillStyle = '#fbbf24'; ctx.font = 'bold 11px Inter, sans-serif';
-          ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
           ctx.fillText(`+${agg.toFixed(2)}`, p.x, p.y - NODE_R - 8);
         }
       }
 
       // Update deltas
       if (s.phase === 'UPDATE') {
+        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches || !document.documentElement.classList.contains('light');
+        ctx.fillStyle = isDark ? '#4ade80' : '#15803d'; ctx.font = 'bold 11px Inter, sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
         for (const node of s.nodes) {
           const p = cpos[node.id]; if (!p) continue;
           const ad = s.nodeAnimData[node.id];
           if (!ad || ad.delta <= 0.001) continue;
           ctx.globalAlpha = Math.min(1, s.phaseProgress * 2.5);
-          ctx.fillStyle = '#4ade80'; ctx.font = 'bold 11px Inter, sans-serif';
-          ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
           ctx.fillText(`+${ad.delta.toFixed(2)}`, p.x, p.y - NODE_R - 14);
           ctx.globalAlpha = 1;
         }
@@ -590,6 +596,27 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
   useEffect(() => { stateRef.current.weight = weight; }, [weight]);
   useEffect(() => { stateRef.current.aggregation = aggregation; }, [aggregation]);
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        toggleAutoPlay();
+      } else if (e.key === 'r' || e.key === 'R') {
+        e.preventDefault();
+        handleReset();
+      } else if (e.key === '?' || e.key === '/') {
+        e.preventDefault();
+        // Could show help modal here
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        runNextPhase();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [toggleAutoPlay, handleReset, runNextPhase]);
+
   const phaseLabel: Record<string, string> = {
     IDLE: 'Ready',
     GENERATE: 'Generating messages…',
@@ -610,26 +637,26 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
     <div className="flex flex-col h-full relative overflow-hidden bg-background/30">
       {/* HUD Info Overlay */}
       <div className="absolute top-6 left-6 z-10 flex flex-col gap-3">
-        <div className="glass-panel p-5 flex flex-col gap-4 rounded-2xl">
+        <div className="glass-panel p-5 flex flex-col gap-4 rounded-lg border-2 border-border">
           <div className="flex items-center gap-6">
             <div className="flex flex-col gap-1.5">
               <span className="text-[9px] font-mono font-bold text-primary tracking-[0.2em] uppercase">Propagation Weight</span>
               <div className="flex items-center gap-3">
                 <input type="range" min="0.1" max="1.0" step="0.1" value={weight}
                   onChange={e => setWeight(parseFloat(e.target.value))}
-                  className="w-24 h-1 accent-primary bg-white/10 rounded-full appearance-none cursor-pointer" />
+                  className="w-24 h-1 accent-primary bg-muted/30 rounded-full appearance-none cursor-pointer" />
                 <span className="text-xs font-mono text-primary font-bold w-6">{weight.toFixed(1)}</span>
               </div>
             </div>
             
-            <div className="w-[1px] h-8 bg-white/10 mx-1"></div>
+            <div className="w-[1px] h-8 bg-border mx-1"></div>
 
             <div className="flex flex-col gap-2">
               <span className="text-[9px] font-mono font-bold text-muted-foreground tracking-[0.2em] uppercase">Aggregator</span>
-              <div className="flex gap-1 p-1 bg-black/40 rounded-xl">
+              <div className="flex gap-1 p-1 bg-muted/20 rounded-lg border border-border">
                 {(['SUM', 'MAX', 'MEAN'] as const).map(a => (
                   <button key={a} onClick={() => setAggregation(a)}
-                    className={`px-3 py-1 text-[9px] font-bold rounded-lg transition-all ${aggregation === a ? 'bg-primary text-black shadow-[0_0_15px_rgba(0,242,255,0.4)]' : 'text-muted-foreground hover:text-foreground'}`}>
+                    className={`px-3 py-1 text-[9px] font-bold rounded transition-all border ${aggregation === a ? 'bg-primary text-primary-foreground border-primary neo-glow-cyan' : 'text-muted-foreground border-transparent hover:text-foreground hover:border-primary/30'}`}>
                     {a}
                   </button>
                 ))}
@@ -639,55 +666,61 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
         </div>
 
         {/* Phase Indicator */}
-        <div className="glass-panel px-4 py-2 flex items-center gap-4 w-fit rounded-xl">
-          <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${isAnimating ? 'bg-neo-cyan' : 'bg-muted-foreground'}`} />
+        <div className="glass-panel px-4 py-3 flex items-center gap-4 w-fit rounded-lg border-2 border-border">
+          <div className={`w-2 h-2 rounded-full animate-pulse ${isAnimating ? 'bg-primary' : 'bg-muted-foreground'}`} />
           <span className="text-[10px] font-mono font-bold tracking-widest text-foreground/90 uppercase">{phaseLabel[phase]}</span>
-          <div className="w-[1px] h-3 bg-white/10"></div>
-          <span className="text-[10px] font-mono text-primary font-bold">L-{layer}</span>
+          <div className="w-[1px] h-3 bg-border"></div>
+          <span className="text-[10px] font-mono text-primary font-bold">L{layer}</span>
         </div>
       </div>
 
       {/* Floating Action Bar (Bottom Center) */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex items-center gap-4">
         <button onClick={handleReset}
-          className="p-4 glass-panel text-muted-foreground rounded-2xl hover:text-primary transition-all group active:scale-95">
+          className="p-4 glass-panel text-muted-foreground rounded-lg border-2 border-border hover:text-primary transition-all group active:scale-95">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:rotate-180 transition-transform duration-700"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
         </button>
         
         <button onClick={runNextPhase} disabled={isAnimating}
-          className={`flex items-center gap-4 px-10 py-4 font-bold uppercase tracking-[0.2em] text-xs rounded-2xl shadow-2xl transition-all relative overflow-hidden group ${
+          className={`flex items-center gap-4 px-10 py-4 font-bold uppercase tracking-[0.2em] text-xs rounded-lg shadow-lg transition-all relative overflow-hidden group border-2 ${
             isAnimating 
-              ? 'bg-muted/50 text-muted-foreground cursor-not-allowed' 
-              : 'bg-primary text-black hover:scale-105 active:scale-95 neo-glow-cyan'
+              ? 'bg-muted/50 text-muted-foreground cursor-not-allowed border-muted/30' 
+              : 'bg-primary text-primary-foreground hover:scale-105 active:scale-95 neo-glow-cyan border-primary/50'
           }`}>
-          <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-          <span className="relative z-10">{isAnimating ? 'Processing' : (phase === 'IDLE' ? 'Execute Protocol' : 'Next Step')}</span>
+          <div className="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+          <span className="relative z-10">{isAnimating ? 'Processing' : (phase === 'IDLE' ? 'Execute' : 'Next')}</span>
           {!isAnimating && (
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="relative z-10"><path d="m9 18 6-6-6-6"/></svg>
           )}
         </button>
 
         <button onClick={toggleAutoPlay}
-          className={`px-8 py-4 font-bold uppercase tracking-[0.2em] text-[10px] rounded-2xl border transition-all active:scale-95 ${
+          className={`px-8 py-4 font-bold uppercase tracking-[0.2em] text-[10px] rounded-lg border-2 transition-all active:scale-95 ${
             isAutoPlaying 
-              ? 'bg-neo-purple/20 text-neo-purple border-neo-purple/50 shadow-[0_0_20px_rgba(112,0,255,0.2)]' 
-              : 'glass-panel text-muted-foreground border-white/10 hover:border-primary/50 hover:text-primary'
+              ? 'bg-secondary/15 text-secondary border-secondary/40 neo-glow-purple' 
+              : 'glass-panel text-muted-foreground border-border hover:border-primary/50 hover:text-primary'
           }`}>
-          {isAutoPlaying ? 'HALT AUTO' : 'AUTO SYNC'}
+          {isAutoPlaying ? 'STOP' : 'AUTO'}
         </button>
       </div>
 
       {/* Canvas Area */}
-      <div ref={containerRef} className="flex-1 relative overflow-hidden rounded-3xl m-4 border border-white/5 bg-black/40">
-        <div className="absolute inset-0 opacity-[0.05] pointer-events-none" 
+      <div ref={containerRef} className="flex-1 relative overflow-hidden rounded-2xl m-4 border-2 border-border bg-muted/10">
+        <div className="absolute inset-0 opacity-[0.02] pointer-events-none" 
              style={{ 
                backgroundImage: 'radial-gradient(circle at 2px 2px, hsla(180, 100%, 50%, 0.5) 1px, transparent 0)', 
                backgroundSize: '32px 32px' 
              }} />
-        <canvas ref={canvasRef} className="absolute inset-0" />
+        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ display: 'block' }} />
+        
+        {/* Keyboard Shortcuts Hint */}
+        <div className="absolute bottom-4 right-4 z-10 text-[9px] text-muted-foreground/60 font-mono pointer-events-none">
+          <div>SPACE: Auto | R: Reset | →: Next</div>
+        </div>
+        
         {tooltip && (
           <div
-            className="fixed z-50 glass-panel rounded-2xl px-5 py-4 text-xs pointer-events-none animate-fade-in shadow-[0_10px_40px_rgba(0,0,0,0.5)] border-primary/20"
+            className="fixed z-50 glass-panel rounded-lg px-5 py-4 text-xs pointer-events-none animate-fade-in shadow-[0_10px_40px_rgba(0,0,0,0.5)] border-2 border-primary/30"
             style={{
               left: tooltip.x + 20, top: tooltip.y + 20,
               maxWidth: 300,

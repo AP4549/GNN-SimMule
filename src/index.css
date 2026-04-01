@@ -36,6 +36,13 @@
     --ring: 188 50% 53%;
 
     --radius: 0.75rem;
+
+    /* Canvas Colors - Dark Mode */
+    --canvas-node-text: rgb(240, 240, 245);
+    --canvas-edge-text: rgb(200, 200, 210);
+    --canvas-grid-color: rgba(255, 255, 255, 0.05);
+    --canvas-grid-text: rgba(255, 255, 255, 0.3);
+    --canvas-glow-filter: drop-shadow(0 0 6px rgba(77, 184, 216, 0.3));
   }
 
   /* Light Mode - Inverted Palette */
@@ -69,6 +76,13 @@
     --ring: 192 40% 35%;
 
     --radius: 0.75rem;
+
+    /* Canvas Colors - Light Mode */
+    --canvas-node-text: rgb(30, 30, 40);
+    --canvas-edge-text: rgb(80, 80, 100);
+    --canvas-grid-color: rgba(0, 0, 0, 0.05);
+    --canvas-grid-text: rgba(0, 0, 0, 0.35);
+    --canvas-glow-filter: drop-shadow(0 0 4px rgba(43, 122, 143, 0.25));
   }
 }
 
@@ -135,6 +149,20 @@
   .neo-brutalist-border {
     @apply border-2 border-current;
   }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s ease-out;
 }
 
 /* Custom Scrollbar */
