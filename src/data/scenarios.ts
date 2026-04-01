@@ -1,7 +1,7 @@
 export interface ScenarioNode {
   id: string;
   label: string;
-  type: 'Fraudster' | 'Mule' | 'Account' | 'Merchant' | 'Crypto';
+  type: 'Fraudster' | 'Mule' | 'Account' | 'Merchant' | 'Crypto' | 'PhishingAttack' | 'Insider';
   x: number;
   y: number;
   risk: number;
@@ -144,30 +144,85 @@ export const SCENARIOS: Record<string, Scenario> = {
       { source: "layer4", target: "finalDest", channel: "UPI", amount: 450000, speed: "Instant", sharedIP: false, multiplier: 2.0 },
       { source: "layer3", target: "finalDest", channel: "Crypto", amount: 55000, speed: "Rapid", sharedIP: false, multiplier: 1.5 }
     ]
+  },
+  phishing: {
+    name: "Phishing Ring",
+    description: "Coordinated phishing attack → credential compromise → account takeover → fund extraction.",
+    context: "Real incident: INR 3.5Cr email phishing scam, 2023. 12 compromised accounts, coordinated SIM swaps.",
+    focusNode: "phishOps",
+    focusDesc: "Central phishing operation coordinates credential theft and account compromise",
+    nodes: [
+      { id: "phishOps", label: "Phishing Ops", type: "PhishingAttack", x: 350, y: 200, risk: 8.8, flow: "Out", velocity: "Extreme" },
+      { id: "victim1", label: "Victim 1", type: "Account", x: 150, y: 80, risk: 6.2, flow: "Out", velocity: "High" },
+      { id: "victim2", label: "Victim 2", type: "Account", x: 150, y: 180, risk: 5.9, flow: "Out", velocity: "High" },
+      { id: "victim3", label: "Victim 3", type: "Account", x: 150, y: 280, risk: 6.5, flow: "Out", velocity: "High" },
+      { id: "simSwap", label: "SIM Swap Expert", type: "Fraudster", x: 350, y: 380, risk: 8.3, flow: "In", velocity: "Extreme" },
+      { id: "aggregator", label: "Fund Aggregator", type: "Mule", x: 550, y: 230, risk: 7.1, flow: "In/Out", velocity: "Extreme" },
+      { id: "exfil", label: "Exfiltration", type: "Crypto", x: 750, y: 230, risk: 4.8, flow: "Out", velocity: "Abnormal" }
+    ],
+    edges: [
+      { source: "phishOps", target: "victim1", channel: "UPI", amount: 125000, speed: "Instant", sharedIP: true, multiplier: 2.4 },
+      { source: "phishOps", target: "victim2", channel: "UPI", amount: 98000, speed: "Instant", sharedIP: true, multiplier: 2.3 },
+      { source: "phishOps", target: "victim3", channel: "IMPS", amount: 142000, speed: "Rapid", sharedIP: true, multiplier: 2.2 },
+      { source: "phishOps", target: "simSwap", channel: "Hawala", amount: 35000, speed: "Standard", sharedIP: false, multiplier: 0.7 },
+      { source: "victim1", target: "aggregator", channel: "UPI", amount: 115000, speed: "Instant", sharedIP: false, multiplier: 2.1 },
+      { source: "victim2", target: "aggregator", channel: "IMPS", amount: 88000, speed: "Rapid", sharedIP: false, multiplier: 2.0 },
+      { source: "victim3", target: "aggregator", channel: "UPI", amount: 130000, speed: "Instant", sharedIP: false, multiplier: 2.2 },
+      { source: "simSwap", target: "aggregator", channel: "NEFT", amount: 32000, speed: "Standard", sharedIP: false, multiplier: 0.8 },
+      { source: "aggregator", target: "exfil", channel: "Crypto", amount: 365000, speed: "Rapid", sharedIP: false, multiplier: 1.8 }
+    ]
+  },
+  insiderTrading: {
+    name: "Insider Trading",
+    description: "Confidential information access → suspicious market orders → profit extraction via shell accounts.",
+    context: "Real pattern: SEBI observations. Employee access to unpublished merger data → unusual options trading.",
+    focusNode: "insider",
+    focusDesc: "Insider employee exploits confidential information for unauthorized trading profits",
+    nodes: [
+      { id: "insider", label: "Insider Emp.", type: "Insider", x: 320, y: 200, risk: 8.6, flow: "Out", velocity: "Extreme" },
+      { id: "dataSource", label: "Data Source", type: "Account", x: 120, y: 200, risk: 7.2, flow: "Out", velocity: "High" },
+      { id: "shell1", label: "Shell A/C 1", type: "Account", x: 520, y: 100, risk: 5.8, flow: "In/Out", velocity: "Abnormal" },
+      { id: "shell2", label: "Shell A/C 2", type: "Account", x: 520, y: 300, risk: 5.5, flow: "In/Out", velocity: "Abnormal" },
+      { id: "broker", label: "Complicit Broker", type: "Fraudster", x: 320, y: 380, risk: 7.9, flow: "In/Out", velocity: "High" },
+      { id: "optionsMkt", label: "Options Market", type: "Merchant", x: 720, y: 200, risk: 4.2, flow: "In", velocity: "Normal" },
+      { id: "profitExit", label: "Profit Exit", type: "Crypto", x: 900, y: 200, risk: 5.3, flow: "Out", velocity: "Abnormal" }
+    ],
+    edges: [
+      { source: "dataSource", target: "insider", channel: "UPI", amount: 25000, speed: "Instant", sharedIP: true, multiplier: 2.5 },
+      { source: "insider", target: "shell1", channel: "IMPS", amount: 450000, speed: "Rapid", sharedIP: false, multiplier: 1.9 },
+      { source: "insider", target: "shell2", channel: "UPI", amount: 380000, speed: "Instant", sharedIP: false, multiplier: 2.0 },
+      { source: "insider", target: "broker", channel: "NEFT", amount: 50000, speed: "Standard", sharedIP: false, multiplier: 0.9 },
+      { source: "shell1", target: "optionsMkt", channel: "UPI", amount: 420000, speed: "Instant", sharedIP: false, multiplier: 2.1 },
+      { source: "shell2", target: "optionsMkt", channel: "IMPS", amount: 350000, speed: "Rapid", sharedIP: false, multiplier: 2.0 },
+      { source: "broker", target: "optionsMkt", channel: "NEFT", amount: 45000, speed: "Standard", sharedIP: false, multiplier: 0.8 },
+      { source: "optionsMkt", target: "profitExit", channel: "Crypto", amount: 780000, speed: "Rapid", sharedIP: false, multiplier: 1.7 }
+    ]
   }
 };
 
 export const TYPE_COLORS: Record<string, string> = {
-  Fraudster: '#ff0070',
-  Mule: '#7000ff',
-  Account: '#00f2ff',
-  Merchant: '#0070ff',
-  Crypto: '#00ff70'
+  Fraudster: '#E85D75',
+  Mule: '#8B6BC4',
+  Account: '#4DB8D8',
+  Merchant: '#5B7FB5',
+  Crypto: '#5FA85F',
+  PhishingAttack: '#D4824F',
+  Insider: '#7A6BA8'
 };
 
 export const CH_COLORS: Record<string, string> = {
-  UPI: '#00f2ff',
-  NEFT: '#00ff70',
-  IMPS: '#7000ff',
-  Crypto: '#ff0070',
-  Hawala: '#ff4000'
+  UPI: '#4DB8D8',
+  NEFT: '#5FA85F',
+  IMPS: '#8B6BC4',
+  Crypto: '#E85D75',
+  Hawala: '#D4824F'
 };
 
 export function getRiskColor(r: number): string {
-  if (r >= 8) return '#ff0070';
-  if (r >= 5) return '#7000ff';
-  if (r >= 3) return '#0070ff';
-  return '#00ff70';
+  if (r >= 8) return '#E85D75';
+  if (r >= 5) return '#8B6BC4';
+  if (r >= 3) return '#5B7FB5';
+  return '#5FA85F';
 }
 
 export function fmtINR(n: number): string {

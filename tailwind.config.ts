@@ -14,9 +14,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['Oswald', 'sans-serif'],
-        body: ['Inter', 'sans-serif'],
+        display: ['Quantico', 'sans-serif'],
+        body: ['Outfit', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
+        neue: ['Base Neue', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -53,21 +54,14 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         neo: {
-          cyan: "#00f2ff",
-          purple: "#7000ff",
-          blue: "#0070ff",
-          pink: "#ff0070",
-          green: "#00ff70",
-        },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
+          cyan: "#4DB8D8",
+          purple: "#8B6BC4",
+          pink: "#E85D75",
+          green: "#5FA85F",
+          blue: "#3B82F6",
+          lime: "#BFFF00",
+          charcoal: "#0a0a0a",
+          darkCharcoal: "#1a1a1a",
         },
       },
       borderRadius: {
