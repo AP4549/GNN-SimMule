@@ -6,98 +6,58 @@
 @tailwind utilities;
 
 @layer base {
-  /* Dark Mode (Default/Primary) - Bruddle Neo-Brutalist */
+  /* Neo-Brutalism UI Library Aesthetic */
   :root {
-    --background: 0 0% 5%;
-    --foreground: 0 0% 98%;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
 
-    --card: 0 0% 8%;
-    --card-foreground: 0 0% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
 
-    --popover: 0 0% 8%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
 
-    --primary: 71 100% 49%;
-    --primary-foreground: 0 0% 5%;
+    --primary: 45 100% 51%;
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 268 38% 57%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 280 100% 50%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 35%;
-    --muted-foreground: 0 0% 55%;
+    --muted: 0 0% 92%;
+    --muted-foreground: 0 0% 30%;
 
-    --accent: 71 100% 49%;
-    --accent-foreground: 0 0% 5%;
+    --accent: 180 100% 50%;
+    --accent-foreground: 0 0% 0%;
 
-    --destructive: 0 65% 61%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 15%;
-    --input: 0 0% 15%;
-    --ring: 71 100% 49%;
+    --border: 0 0% 0%;
+    --input: 0 0% 100%;
+    --ring: 45 100% 51%;
 
-    --radius: 0.75rem;
+    --radius: 0rem;
 
-    /* Canvas Colors - Dark Mode */
-    --canvas-node-text: rgb(240, 240, 245);
-    --canvas-edge-text: rgb(200, 200, 210);
-    --canvas-grid-color: rgba(255, 255, 255, 0.05);
-    --canvas-grid-text: rgba(255, 255, 255, 0.3);
-    --canvas-glow-filter: drop-shadow(0 0 6px rgba(191, 255, 0, 0.3));
+    /* Canvas Colors */
+    --canvas-node-text: rgb(0, 0, 0);
+    --canvas-edge-text: rgb(60, 60, 60);
+    --canvas-grid-color: rgba(0, 0, 0, 0.15);
+    --canvas-grid-text: rgba(0, 0, 0, 0.6);
   }
 
-  /* Light Mode - Inverted Palette */
   .light {
-    --background: 210 10% 97%;
-    --foreground: 225 12% 15%;
-
-    --card: 210 0% 100%;
-    --card-foreground: 225 12% 15%;
-
-    --popover: 210 0% 100%;
-    --popover-foreground: 225 12% 15%;
-
-    --primary: 192 40% 35%;
-    --primary-foreground: 210 10% 97%;
-
-    --secondary: 268 28% 35%;
-    --secondary-foreground: 210 10% 97%;
-
-    --muted: 210 8% 55%;
-    --muted-foreground: 210 8% 42%;
-
-    --accent: 192 40% 35%;
-    --accent-foreground: 210 10% 97%;
-
-    --destructive: 0 55% 48%;
-    --destructive-foreground: 210 10% 97%;
-
-    --border: 210 8% 85%;
-    --input: 210 8% 85%;
-    --ring: 192 40% 35%;
-
-    --radius: 0.75rem;
-
-    /* Canvas Colors - Light Mode */
-    --canvas-node-text: rgb(30, 30, 40);
-    --canvas-edge-text: rgb(80, 80, 100);
-    --canvas-grid-color: rgba(0, 0, 0, 0.05);
-    --canvas-grid-text: rgba(0, 0, 0, 0.35);
-    --canvas-glow-filter: drop-shadow(0 0 4px rgba(43, 122, 143, 0.25));
+    /* Alias for consistency - all modes use neo-brutalism */
   }
 }
 
 @layer base {
   * {
-    @apply border-border transition-colors duration-200;
+    @apply border-border;
   }
 
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Outfit', sans-serif;
-    background-image: 
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' seed='2'/%3E%3C/filter%3E%3Crect width='400' height='400' fill='%230a0a0a' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
-    background-attachment: fixed;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -110,69 +70,56 @@
 
 @layer utilities {
   .glass-panel {
-    @apply backdrop-blur-xl border shadow-2xl transition-all duration-300;
-  }
-
-  .dark .glass-panel {
-    @apply bg-white/[0.02] border-white/[0.08];
-  }
-
-  .light .glass-panel {
-    @apply bg-white/[0.6] border-black/[0.08];
+    @apply bg-background border-4 border-border;
   }
   
   .glass-card {
-    @apply backdrop-blur-md border hover:bg-white/[0.05] transition-all duration-300;
+    @apply bg-background border-2 border-border hover:bg-muted transition-colors;
   }
 
-  .dark .glass-card {
-    @apply bg-white/[0.03] border-white/[0.08];
-  }
-
-  .light .glass-card {
-    @apply bg-white/[0.5] border-black/[0.08];
-  }
-
+  /* Neo-brutalism doesn't use shadows or glows */
   .neo-glow-cyan {
-    box-shadow: 0 0 20px hsla(71, 100%, 49%, 0.3), inset 0 0 10px hsla(71, 100%, 49%, 0.1);
+    @apply border-4 border-primary;
   }
 
   .neo-glow-purple {
-    box-shadow: 0 0 20px hsla(268, 38%, 57%, 0.2), inset 0 0 10px hsla(268, 38%, 57%, 0.05);
+    @apply border-4 border-secondary;
   }
 
   .text-shadow-cyan {
-    text-shadow: 0 0 10px hsla(71, 100%, 49%, 0.5), 0 0 20px hsla(71, 100%, 49%, 0.3);
+    /* Removed - neo-brutalism doesn't use text shadows */
   }
 
   .text-shadow-purple {
-    text-shadow: 0 0 10px hsla(268, 38%, 57%, 0.4);
+    /* Removed - neo-brutalism doesn't use text shadows */
   }
 
   .text-shadow-pink {
-    text-shadow: 0 0 10px hsla(0, 65%, 61%, 0.3);
+    /* Removed - neo-brutalism doesn't use text shadows */
   }
 
   .neo-brutalist-border {
-    @apply border-2 border-current;
+    @apply border-4 border-border;
   }
 
-  .bruddle-heading {
-    font-family: 'Quantico', sans-serif;
-    font-size: 3rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    line-height: 1.1;
-    text-transform: uppercase;
-    color: hsl(var(--primary));
-    text-shadow: 0 0 20px hsla(71, 100%, 49%, 0.4), 0 0 40px hsla(71, 100%, 49%, 0.2);
+  .nb-button {
+    @apply bg-primary text-primary-foreground border-4 border-border font-bold uppercase px-4 py-3;
   }
 
-  .bruddle-title {
-    font-family: 'Base Neue', sans-serif;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
+  .nb-button:hover {
+    @apply bg-secondary text-secondary-foreground;
+  }
+
+  .nb-button:active {
+    @apply scale-95;
+  }
+
+  .nb-card {
+    @apply bg-background border-4 border-border p-4;
+  }
+
+  .nb-input {
+    @apply bg-input text-foreground border-2 border-border font-sans;
   }
 }
 
@@ -207,18 +154,16 @@
   @apply bg-primary;
 }
 
-/* Phase badges */
+/* Phase badges - Neo-brutalism */
 .phase-badge {
-  @apply px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-tighter border;
+  @apply px-3 py-1 text-[11px] font-bold uppercase tracking-widest border-2 border-border;
 }
-.phase-idle { @apply bg-muted text-muted-foreground border-muted/30; }
-.phase-generate { @apply bg-primary/15 text-primary border-primary/40; box-shadow: 0 0 12px rgba(77, 184, 216, 0.15); }
-.phase-aggregate { @apply bg-secondary/15 text-secondary border-secondary/40; box-shadow: 0 0 12px rgba(139, 107, 196, 0.15); }
-.phase-update { @apply bg-green-500/15 text-green-400 border-green-500/40; box-shadow: 0 0 12px rgba(34, 197, 94, 0.15); }
-.phase-analyze { @apply bg-blue-500/15 text-blue-400 border-blue-500/40; box-shadow: 0 0 12px rgba(59, 130, 246, 0.15); }
+.phase-idle { @apply bg-muted text-muted-foreground; }
+.phase-generate { @apply bg-accent text-accent-foreground border-4; }
+.phase-aggregate { @apply bg-secondary text-secondary-foreground border-4; }
+.phase-update { @apply bg-green-400 text-foreground border-4; }
+.phase-analyze { @apply bg-blue-500 text-white border-4; }
 
-/* Neo-green and neo-pink colors for dark mode */
-.dark .neo-pink { @apply text-red-400; }
-.dark .neo-green { @apply text-green-400; }
-.light .neo-pink { @apply text-red-600; }
-.light .neo-green { @apply text-green-700; }
+/* Neo-brutalism color utilities */
+.neo-pink { @apply text-destructive; }
+.neo-green { @apply text-green-600; }
