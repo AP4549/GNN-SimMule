@@ -4,7 +4,6 @@ import GraphVisualizer from '@/components/GraphVisualizer';
 import AnalysisPanel from '@/components/AnalysisPanel';
 import { SCENARIOS, TYPE_COLORS, CH_COLORS, fmtINR } from '@/data/scenarios';
 import type { AnalysisData } from '@/components/GraphVisualizer';
-import { LiquidButton } from '@/components/ui/liquid-glass-button';
 import { Shield, Info, Layers, Zap, Activity } from 'lucide-react';
 
 const Index = () => {
@@ -29,13 +28,13 @@ const Index = () => {
   }, [darkMode]);
 
   return (
-    <div className="min-h-screen flex bg-background text-foreground font-sans selection:bg-primary/30 selection:text-primary overflow-hidden">
+    <div className={`min-h-screen flex bg-background text-foreground font-sans selection:bg-primary/30 selection:text-primary overflow-hidden ${darkMode ? 'dark' : 'light'}`}>
       {/* Premium Sidebar */}
-      <aside className="w-64 glass-panel border-r-0 flex flex-col z-20">
+      <aside className="w-64 glass-panel border-r flex flex-col z-20">
         <div className="p-6 flex flex-col h-full">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-[0_0_20px_rgba(0,242,255,0.3)]">
-              <Shield className="w-6 h-6 text-black" />
+            <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center shadow-lg border-2 border-primary/30">
+              <Shield className="w-6 h-6 text-primary-foreground" />
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-bold tracking-tighter text-shadow-cyan">NEO RISK LAB</span>
@@ -51,25 +50,25 @@ const Index = () => {
                   <button
                     key={key}
                     onClick={() => { setScenario(key); setAnalysisData(null); }}
-                    className={`w-full text-left px-4 py-3 rounded-xl text-xs transition-all duration-300 flex items-center justify-between group ${
+                    className={`w-full text-left px-4 py-3 rounded-lg text-xs transition-all duration-300 flex items-center justify-between group font-medium border-2 ${
                       key === scenario
-                        ? 'bg-primary/10 text-primary border border-primary/20 neo-glow-cyan'
-                        : 'text-muted-foreground hover:bg-white/5 hover:text-foreground'
+                        ? 'bg-primary/10 text-primary border-primary/40 neo-glow-cyan'
+                        : 'text-muted-foreground border-transparent hover:bg-white/5 hover:text-foreground'
                     }`}
                   >
-                    <span className="font-medium tracking-tight">{s.name}</span>
+                    <span className="tracking-tight">{s.name}</span>
                     <Zap className={`w-3 h-3 transition-transform duration-500 ${key === scenario ? 'text-primary scale-110' : 'text-muted-foreground/30 group-hover:text-primary'}`} />
                   </button>
                 ))}
               </div>
             </div>
 
-            <div className="pt-4 border-t border-white/5">
+            <div className="pt-4 border-t border-border">
               <h3 className="text-[10px] font-mono text-muted-foreground mb-4 uppercase tracking-[0.2em]">Status</h3>
               <div className="space-y-3 px-2">
                 <div className="flex items-center justify-between text-[11px]">
                   <span className="text-muted-foreground flex items-center gap-2"><Activity className="w-3 h-3"/> System</span>
-                  <span className="text-neo-green font-mono">NOMINAL</span>
+                  <span className="neo-green font-mono">NOMINAL</span>
                 </div>
                 <div className="flex items-center justify-between text-[11px]">
                   <span className="text-muted-foreground flex items-center gap-2"><Layers className="w-3 h-3"/> GNN Engine</span>
@@ -79,15 +78,13 @@ const Index = () => {
             </div>
           </nav>
 
-          <div className="pt-6 border-t border-white/5 flex flex-col gap-4">
-             <LiquidButton
-                size="sm"
-                variant="default"
+          <div className="pt-6 border-t border-border flex flex-col gap-4">
+             <button
                 onClick={() => setDarkMode((v) => !v)}
-                className="w-full text-[10px] font-bold tracking-widest uppercase"
+                className="w-full px-4 py-2.5 rounded-lg text-[10px] font-bold tracking-widest uppercase border-2 border-primary/40 text-primary hover:bg-primary/10 transition-all duration-300 neo-glow-cyan"
               >
-                {darkMode ? 'DARK PROTOCOL' : 'LIGHT PROTOCOL'}
-              </LiquidButton>
+                {darkMode ? '◐ DARK' : '◑ LIGHT'}
+              </button>
             <p className="text-[10px] text-muted-foreground/50 font-mono text-center">© 2026 SimMule v1.0.4</p>
           </div>
         </div>
@@ -96,17 +93,17 @@ const Index = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col relative z-10">
         {/* Top Header */}
-        <header className="h-16 px-8 flex items-center justify-between border-b border-white/5 bg-background/50 backdrop-blur-md">
+        <header className="h-16 px-8 flex items-center justify-between border-b border-border bg-background/50 backdrop-blur-md">
           <div className="flex items-center gap-4">
             <h1 className="text-lg font-bold tracking-tighter text-shadow-cyan">{sc?.name}</h1>
-            <div className="h-4 w-[1px] bg-white/10" />
+            <div className="h-4 w-[1px] bg-border" />
             <p className="text-xs text-muted-foreground max-w-md line-clamp-1">{sc?.description}</p>
           </div>
           
           <div className="flex items-center gap-4">
             <button
               onClick={() => setShowGuide(true)}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest glass-card text-primary border-primary/20 hover:border-primary/50 transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-widest glass-card text-primary border-2 border-primary/30 hover:border-primary/50 transition-all"
             >
               <Info className="w-3 h-3" />
               Intelligence Guide
@@ -118,8 +115,7 @@ const Index = () => {
           {/* Main Visualizer Area */}
           <div className="flex-1 flex gap-6 min-h-0">
             {/* Visualizer Container */}
-            <div className="flex-1 glass-panel rounded-3xl overflow-hidden relative group">
-              <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-secondary/5 pointer-events-none" />
+            <div className="flex-1 glass-panel rounded-2xl overflow-hidden relative group border-2">
               <GraphVisualizer scenario={scenario} onAnalysis={handleAnalysis} />
               
               <AnimatePresence>
@@ -131,16 +127,16 @@ const Index = () => {
 
             {/* Right Side Sidebar (Legend & Context) */}
             <aside className="w-80 flex flex-col gap-6 overflow-y-auto pr-2">
-              <section className="glass-card rounded-2xl p-5 space-y-4">
+              <section className="glass-card rounded-xl p-5 space-y-4 border-2">
                 <div>
-                  <h3 className="text-[10px] font-mono text-primary mb-3 uppercase tracking-[0.2em]">Network Context</h3>
+                  <h3 className="text-[10px] font-mono text-primary mb-3 uppercase tracking-[0.2em] font-bold">Network Context</h3>
                   <p className="text-xs text-foreground/80 leading-relaxed font-body">
                     {sc?.context}
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-white/5">
-                   <h3 className="text-[10px] font-mono text-primary mb-3 uppercase tracking-[0.2em]">Operational Logic</h3>
+                <div className="pt-4 border-t border-border">
+                   <h3 className="text-[10px] font-mono text-primary mb-3 uppercase tracking-[0.2em] font-bold">Operational Logic</h3>
                    <p className="text-[11px] text-muted-foreground leading-relaxed italic">
                     {sc?.focusDesc}
                   </p>
@@ -148,45 +144,45 @@ const Index = () => {
               </section>
 
               {/* Legend Section */}
-              <section className="glass-card rounded-2xl p-5 space-y-5">
+              <section className="glass-card rounded-xl p-5 space-y-5 border-2">
                 <div>
-                  <h3 className="text-[10px] font-mono text-muted-foreground mb-3 uppercase tracking-[0.2em]">Entities</h3>
+                  <h3 className="text-[10px] font-mono text-muted-foreground mb-3 uppercase tracking-[0.2em] font-bold">Entities</h3>
                   <div className="grid grid-cols-1 gap-2">
                     {Object.entries(TYPE_COLORS).map(([type, color]) => (
-                      <div key={type} className="flex items-center justify-between text-[11px] glass-panel bg-white/5 border-0 px-3 py-2 rounded-lg">
-                        <span className="text-foreground/80">{type}</span>
+                      <div key={type} className="flex items-center justify-between text-[11px] glass-panel px-3 py-2 rounded-lg border">
+                        <span className="text-foreground/80 font-medium">{type}</span>
                         <div className="w-2 h-2 rounded-full shadow-[0_0_8px_currentColor]" style={{ background: color, color: color }} />
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-white/5">
-                  <h3 className="text-[10px] font-mono text-muted-foreground mb-3 uppercase tracking-[0.2em]">Channels</h3>
+                <div className="pt-4 border-t border-border">
+                  <h3 className="text-[10px] font-mono text-muted-foreground mb-3 uppercase tracking-[0.2em] font-bold">Channels</h3>
                   <div className="grid grid-cols-1 gap-2">
                     {Object.entries(CH_COLORS).map(([ch, color]) => (
-                      <div key={ch} className="flex items-center justify-between text-[11px] glass-panel bg-white/5 border-0 px-3 py-2 rounded-lg">
-                        <span className="text-foreground/80">{ch}</span>
+                      <div key={ch} className="flex items-center justify-between text-[11px] glass-panel px-3 py-2 rounded-lg border">
+                        <span className="text-foreground/80 font-medium">{ch}</span>
                         <div className="w-6 h-1 rounded-full opacity-80" style={{ background: color }} />
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-white/5">
-                  <h3 className="text-[10px] font-mono text-muted-foreground mb-3 uppercase tracking-[0.2em]">Risk Grading</h3>
+                <div className="pt-4 border-t border-border">
+                  <h3 className="text-[10px] font-mono text-muted-foreground mb-3 uppercase tracking-[0.2em] font-bold">Risk Grading</h3>
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-[10px]">
-                      <span className="text-muted-foreground">CRITICAL (≥ 8.0)</span>
-                      <div className="w-2 h-2 rounded-full bg-destructive shadow-[0_0_10px_#ef4444]" />
+                      <span className="text-muted-foreground font-medium">CRITICAL (≥ 8.0)</span>
+                      <div className="w-2 h-2 rounded-full bg-destructive shadow-lg" />
                     </div>
                     <div className="flex items-center justify-between text-[10px]">
-                      <span className="text-muted-foreground">SUSPICIOUS (≥ 5.0)</span>
-                      <div className="w-2 h-2 rounded-full bg-secondary shadow-[0_0_10px_#7000ff]" />
+                      <span className="text-muted-foreground font-medium">SUSPICIOUS (≥ 5.0)</span>
+                      <div className="w-2 h-2 rounded-full bg-secondary shadow-lg" />
                     </div>
                     <div className="flex items-center justify-between text-[10px]">
-                      <span className="text-muted-foreground">NOMINAL (&lt; 5.0)</span>
-                      <div className="w-2 h-2 rounded-full bg-primary shadow-[0_0_10px_#00f2ff]" />
+                      <span className="text-muted-foreground font-medium">NOMINAL (&lt; 5.0)</span>
+                      <div className="w-2 h-2 rounded-full bg-primary shadow-lg" />
                     </div>
                   </div>
                 </div>
@@ -210,7 +206,7 @@ const Index = () => {
               initial={{ scale: 0.95, opacity: 0, y: 20 }} 
               animate={{ scale: 1, opacity: 1, y: 0 }} 
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="w-full max-w-3xl glass-panel rounded-3xl p-10 relative overflow-hidden"
+              className="w-full max-w-3xl glass-panel rounded-2xl p-10 relative overflow-hidden border-2"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="absolute top-0 right-0 p-6">
@@ -220,7 +216,7 @@ const Index = () => {
               </div>
 
               <div className="relative z-10 space-y-8">
-                <header>
+                <header className="border-b border-border pb-4">
                   <h2 className="text-2xl font-bold tracking-tighter mb-2 text-shadow-cyan">Neural Intelligence Framework</h2>
                   <p className="text-sm text-muted-foreground">Graph Neural Network Protocol for Financial Risk Analysis</p>
                 </header>
@@ -242,8 +238,8 @@ const Index = () => {
                         { step: '02', title: 'AGGREGATE', desc: 'Node-level synthesis of incoming risk' },
                         { step: '03', title: 'UPDATE', desc: 'Recalculation of entity risk profile' }
                       ].map(p => (
-                        <div key={p.step} className="glass-card p-3 rounded-xl flex gap-4 items-center">
-                          <span className="text-lg font-bold font-mono text-white/10">{p.step}</span>
+                        <div key={p.step} className="glass-card p-3 rounded-lg flex gap-4 items-center border-2 border-border/50">
+                          <span className="text-lg font-bold font-mono text-muted-foreground/30">{p.step}</span>
                           <div>
                             <div className="text-[10px] font-bold text-primary">{p.title}</div>
                             <div className="text-[10px] text-muted-foreground">{p.desc}</div>
@@ -254,20 +250,20 @@ const Index = () => {
                   </div>
 
                   <div className="space-y-6">
-                    <section className="glass-card p-5 rounded-2xl bg-primary/5 border-primary/20">
-                      <h3 className="text-xs font-mono text-secondary mb-3 uppercase tracking-widest">Mathematical Core</h3>
+                    <section className="glass-card p-5 rounded-xl border-2 border-primary/30">
+                      <h3 className="text-xs font-mono text-secondary mb-3 uppercase tracking-widest font-bold">Mathematical Core</h3>
                       <div className="space-y-4 font-mono text-[10px]">
-                        <div className="p-2 bg-black/40 rounded border border-white/5">
+                        <div className="p-2 rounded border-2 border-border bg-muted/10">
                           <div className="text-muted-foreground mb-1">Message Kernel:</div>
                           <code className="text-secondary">m[i→j] = R[i] × M[ij] × W</code>
                         </div>
-                        <div className="p-2 bg-black/40 rounded border border-white/5">
+                        <div className="p-2 rounded border-2 border-border bg-muted/10">
                           <div className="text-muted-foreground mb-1">Aggregation:</div>
                           <code className="text-primary">A[j] = Σ m[i→j]</code>
                         </div>
-                        <div className="p-2 bg-black/40 rounded border border-white/5">
+                        <div className="p-2 rounded border-2 border-border bg-muted/10">
                           <div className="text-muted-foreground mb-1">Update Map:</div>
-                          <code className="text-neo-green">R'[j] = clip(R[j] + A[j], 0, 10)</code>
+                          <code className="neo-green">R'[j] = clip(R[j] + A[j], 0, 10)</code>
                         </div>
                       </div>
                     </section>

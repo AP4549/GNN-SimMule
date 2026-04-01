@@ -148,26 +148,26 @@ export const SCENARIOS: Record<string, Scenario> = {
 };
 
 export const TYPE_COLORS: Record<string, string> = {
-  Fraudster: '#ff0070',
-  Mule: '#7000ff',
-  Account: '#00f2ff',
-  Merchant: '#0070ff',
-  Crypto: '#00ff70'
+  Fraudster: '#E85D75',
+  Mule: '#8B6BC4',
+  Account: '#4DB8D8',
+  Merchant: '#5B7FB5',
+  Crypto: '#5FA85F'
 };
 
 export const CH_COLORS: Record<string, string> = {
-  UPI: '#00f2ff',
-  NEFT: '#00ff70',
-  IMPS: '#7000ff',
-  Crypto: '#ff0070',
-  Hawala: '#ff4000'
+  UPI: '#4DB8D8',
+  NEFT: '#5FA85F',
+  IMPS: '#8B6BC4',
+  Crypto: '#E85D75',
+  Hawala: '#D4824F'
 };
 
 export function getRiskColor(r: number): string {
-  if (r >= 8) return '#ff0070';
-  if (r >= 5) return '#7000ff';
-  if (r >= 3) return '#0070ff';
-  return '#00ff70';
+  if (r >= 8) return '#E85D75';
+  if (r >= 5) return '#8B6BC4';
+  if (r >= 3) return '#5B7FB5';
+  return '#5FA85F';
 }
 
 export function fmtINR(n: number): string {
