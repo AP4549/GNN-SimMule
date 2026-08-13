@@ -17,17 +17,17 @@ export default function AnalysisPanel({ data, onClose }: AnalysisPanelProps) {
       animate={{ x: 0 }}
       exit={{ x: '100%' }}
       transition={{ type: 'spring', damping: 35, stiffness: 350 }}
-      className="absolute right-0 top-0 bottom-0 w-85 bg-background border-l-4 border-border flex flex-col z-50"
+      className="absolute right-0 top-0 bottom-0 w-85 bg-card border-l border-border flex flex-col z-50 soft-shadow-lg"
     >
-      <div className="flex items-center justify-between px-6 py-5 border-b-4 border-border">
+      <div className="flex items-center justify-between px-6 py-5 border-b border-border">
         <div className="flex flex-col">
-          <h3 className="font-display text-sm tracking-widest text-foreground flex items-center gap-2 font-bold uppercase">
-            <Activity className="w-4 h-4 text-foreground" /> REPORT
+          <h3 className="text-sm tracking-tight text-foreground flex items-center gap-2 font-bold">
+            <Activity className="w-4 h-4 text-primary" /> Report
           </h3>
-          <span className="text-[9px] font-mono text-foreground uppercase tracking-widest mt-0.5">Layer 0{layer}</span>
+          <span className="text-[11px] text-muted-foreground mt-0.5">Layer 0{layer}</span>
         </div>
-        <button onClick={onClose} className="p-2 hover:bg-primary transition-none group border-2 border-border bg-background">
-          <X className="w-5 h-5 text-foreground group-hover:text-primary-foreground transition-colors" />
+        <button onClick={onClose} className="w-9 h-9 rounded-full flex items-center justify-center hover:bg-muted transition-colors group">
+          <X className="w-5 h-5 text-muted-foreground group-hover:text-foreground transition-colors" />
         </button>
       </div>
 
@@ -35,16 +35,16 @@ export default function AnalysisPanel({ data, onClose }: AnalysisPanelProps) {
         {/* Rankings */}
         <section>
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-[10px] uppercase tracking-widest text-foreground font-bold">RANKINGS</h4>
-            <span className="text-[10px] font-mono text-foreground">{sorted.length} ENTITIES</span>
+            <h4 className="text-xs tracking-wide text-foreground font-semibold">Rankings</h4>
+            <span className="text-[11px] text-muted-foreground">{sorted.length} entities</span>
           </div>
-          <div className="bg-background overflow-hidden border-3 border-border">
+          <div className="bg-card overflow-hidden rounded-2xl border border-border">
             <table className="w-full text-[11px]">
               <thead>
-                <tr className="bg-muted border-b-2 border-border text-foreground">
-                  <th className="py-2.5 px-4 text-left font-mono font-bold">#</th>
-                  <th className="py-2.5 px-4 text-left font-mono font-bold">ENTITY</th>
-                  <th className="py-2.5 px-4 text-right font-mono font-bold">RISK</th>
+                <tr className="bg-muted/60 text-muted-foreground">
+                  <th className="py-2.5 px-4 text-left font-semibold">#</th>
+                  <th className="py-2.5 px-4 text-left font-semibold">Entity</th>
+                  <th className="py-2.5 px-4 text-right font-semibold">Risk</th>
                 </tr>
               </thead>
               <tbody>
@@ -56,12 +56,12 @@ export default function AnalysisPanel({ data, onClose }: AnalysisPanelProps) {
                   const riskColor = current >= 8 ? 'hsl(var(--destructive))' : current >= 5 ? 'hsl(var(--secondary))' : 'hsl(var(--primary))';
                   
                   return (
-                    <tr key={n.id} className="border-t border-border hover:bg-muted transition-none group">
-                      <td className="py-3 px-4 text-foreground font-mono font-medium">{i + 1}</td>
+                    <tr key={n.id} className="border-t border-border hover:bg-muted/50 transition-colors group">
+                      <td className="py-3 px-4 text-muted-foreground font-mono font-medium">{i + 1}</td>
                       <td className="py-3 px-4">
                         <div className="flex flex-col">
-                          <span className="font-bold text-foreground tracking-tight">{n.label}</span>
-                          <span className="text-[9px] font-mono text-foreground uppercase tracking-tighter" style={{ color: TYPE_COLORS[n.type] }}>{n.type}</span>
+                          <span className="font-semibold text-foreground tracking-tight">{n.label}</span>
+                          <span className="text-[10px] font-medium" style={{ color: TYPE_COLORS[n.type] }}>{n.type}</span>
                         </div>
                       </td>
                       <td className="py-3 px-4 text-right">
@@ -70,7 +70,7 @@ export default function AnalysisPanel({ data, onClose }: AnalysisPanelProps) {
                             {current.toFixed(1)}
                           </span>
                           {delta !== 0 && (
-                            <span className={`text-[8px] font-mono font-bold ${delta > 0 ? 'neo-pink' : 'neo-green'}`}>
+                            <span className={`text-[9px] font-mono font-bold ${delta > 0 ? 'neo-pink' : 'neo-green'}`}>
                               {delta > 0 ? `+${delta.toFixed(1)}` : delta.toFixed(1)}
                             </span>
                           )}
@@ -87,26 +87,26 @@ export default function AnalysisPanel({ data, onClose }: AnalysisPanelProps) {
         {/* Top Suspect Card */}
         {topSuspect && (
           <section className="animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <h4 className="text-[10px] uppercase tracking-widest neo-pink font-bold mb-3 flex items-center gap-2">
-              <User className="w-3 h-3" /> THREAT
+            <h4 className="text-xs tracking-wide neo-pink font-semibold mb-3 flex items-center gap-2">
+              <User className="w-3.5 h-3.5" /> Top threat
             </h4>
-            <div className="bg-background p-5 border-4 border-destructive relative overflow-hidden group">
+            <div className="bg-destructive/5 p-5 rounded-2xl border border-destructive/30 relative overflow-hidden group">
               <div className="flex items-center justify-between mb-4 relative z-10">
-                <span className="text-lg font-bold tracking-tighter">{topSuspect.label}</span>
+                <span className="text-lg font-bold tracking-tight">{topSuspect.label}</span>
                 <div className="flex flex-col items-end">
-                   <span className="text-2xl font-black font-mono neo-pink leading-none">
+                   <span className="text-2xl font-extrabold font-mono neo-pink leading-none">
                     {topSuspect.currentRisk.toFixed(1)}
                   </span>
-                  <span className="text-[8px] font-mono text-foreground uppercase mt-1">RISK</span>
+                  <span className="text-[10px] text-muted-foreground mt-1">Risk</span>
                 </div>
               </div>
 
               <div className="flex flex-wrap gap-2 relative z-10">
-                <span className="text-[9px] px-3 py-1 font-bold uppercase tracking-widest border-2 border-border neo-pink bg-destructive">
+                <span className="text-[10px] px-3 py-1 font-semibold rounded-full text-destructive-foreground bg-destructive">
                   {topSuspect.type}
                 </span>
-                <div className="px-3 py-1 bg-background border-2 border-border text-[9px] font-mono text-foreground uppercase flex items-center gap-2">
-                  <TrendingUp className="w-3 h-3" /> VOL: {topSuspect.velocity}
+                <div className="px-3 py-1 bg-card rounded-full border border-border text-[10px] text-muted-foreground flex items-center gap-1.5">
+                  <TrendingUp className="w-3 h-3" /> Vol: {topSuspect.velocity}
                 </div>
               </div>
             </div>
@@ -116,26 +116,26 @@ export default function AnalysisPanel({ data, onClose }: AnalysisPanelProps) {
         {/* Drivers */}
         {focusNode && drivers.length > 0 && (
           <section>
-            <h4 className="text-[10px] uppercase tracking-widest text-foreground font-bold mb-4 flex items-center gap-2">
-              <Activity className="w-3 h-3" /> VECTORS
+            <h4 className="text-xs tracking-wide text-foreground font-semibold mb-4 flex items-center gap-2">
+              <Activity className="w-3.5 h-3.5 text-primary" /> Risk vectors
             </h4>
             <div className="space-y-3">
               {drivers.map((d, i) => (
-                <div key={i} className="bg-background p-4 border-3 border-border group hover:bg-muted transition-none">
+                <div key={i} className="bg-muted/40 p-4 rounded-2xl group hover:bg-muted/70 transition-colors">
                   <div className="flex justify-between items-center mb-3">
-                    <span className="text-[11px] font-bold text-foreground">{d.srcNode?.label || d.edge.source}</span>
+                    <span className="text-xs font-semibold text-foreground">{d.srcNode?.label || d.edge.source}</span>
                     <span className="text-xs font-mono font-bold text-foreground">+{d.contrib.toFixed(1)}</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="flex-1 h-2 bg-border overflow-hidden border-2 border-border">
+                    <div className="flex-1 h-2 bg-border rounded-full overflow-hidden">
                       <motion.div 
                         initial={{ width: 0 }}
                         animate={{ width: `${Math.min(100, (d.contrib / 10) * 100)}%` }}
                         transition={{ duration: 1, ease: 'easeOut' }}
-                        className="h-full bg-primary" 
+                        className="h-full bg-primary rounded-full" 
                       />
                     </div>
-                    <span className="text-[9px] font-mono uppercase font-bold tracking-tighter" style={{ color: CH_COLORS[d.edge.channel] }}>{d.edge.channel}</span>
+                    <span className="text-[10px] font-medium" style={{ color: CH_COLORS[d.edge.channel] }}>{d.edge.channel}</span>
                   </div>
                 </div>
               ))}
@@ -146,7 +146,7 @@ export default function AnalysisPanel({ data, onClose }: AnalysisPanelProps) {
         {/* Risk Trend */}
         {layer > 0 && riskHistory[focusNodeId] && riskHistory[focusNodeId].length >= 2 && (
           <section>
-            <h4 className="text-[10px] uppercase tracking-widest text-foreground font-bold mb-4">TREND</h4>
+            <h4 className="text-xs tracking-wide text-foreground font-semibold mb-4">Risk trend</h4>
             <TrendChart data={riskHistory[focusNodeId]} />
           </section>
         )}
@@ -172,12 +172,12 @@ function TrendChart({ data }: { data: number[] }) {
   }
 
   return (
-    <div className="bg-background p-4 border-3 border-border">
+    <div className="bg-muted/40 p-4 rounded-2xl">
       <svg viewBox={`0 0 ${W} ${H}`} className="w-full">
         <defs>
           <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="hsl(188, 50%, 53%)" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="hsl(188, 50%, 53%)" stopOpacity="0" />
+            <stop offset="0%" stopColor="hsl(207, 85%, 55%)" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="hsl(207, 85%, 55%)" stopOpacity="0" />
           </linearGradient>
         </defs>
         
@@ -206,7 +206,7 @@ function TrendChart({ data }: { data: number[] }) {
         })}
 
         {/* The Line */}
-        <path d={path} fill="none" stroke="hsl(188, 50%, 53%)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d={path} fill="none" stroke="hsl(207, 85%, 55%)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
 
         {/* Points */}
         {pts.map((p, i) => {
@@ -214,7 +214,7 @@ function TrendChart({ data }: { data: number[] }) {
           const textColor = isDark ? '#ffffff' : '#000000';
           return (
             <g key={i}>
-              <circle cx={p.x} cy={p.y} r="3" fill="hsl(188, 50%, 53%)" style={{ filter: 'drop-shadow(0 0 5px hsl(188, 50%, 53%))' }} />
+              <circle cx={p.x} cy={p.y} r="3" fill="hsl(207, 85%, 55%)" style={{ filter: 'drop-shadow(0 0 5px hsl(207, 85%, 55%))' }} />
               <text x={p.x} y={p.y - 10} fill={textColor} fontSize="9" fontWeight="bold" font-family="JetBrains Mono" textAnchor="middle">{p.v.toFixed(1)}</text>
             </g>
           );

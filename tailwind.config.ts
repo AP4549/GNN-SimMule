@@ -14,10 +14,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['Quantico', 'sans-serif'],
-        body: ['Outfit', 'sans-serif'],
+        sans: ['Plus Jakarta Sans', 'sans-serif'],
+        display: ['Plus Jakarta Sans', 'sans-serif'],
+        body: ['Plus Jakarta Sans', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
-        neue: ['Base Neue', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

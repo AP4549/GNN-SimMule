@@ -1,52 +1,86 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Quantico:wght@400;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.baseueine.com/font-face.css');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  /* Neo-Brutalism UI Library Aesthetic */
+  /* Friendly Healthcare-Dashboard Aesthetic — soft, calm, approachable */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
+    --background: 210 40% 98%;
+    --foreground: 222 24% 24%;
 
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
+    --card-foreground: 222 24% 24%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
+    --popover-foreground: 222 24% 24%;
 
-    --primary: 45 100% 51%;
-    --primary-foreground: 0 0% 0%;
+    /* Calming medical blue */
+    --primary: 207 85% 55%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 280 100% 50%;
+    /* Soft lavender */
+    --secondary: 255 72% 70%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 92%;
-    --muted-foreground: 0 0% 30%;
+    --muted: 210 30% 95%;
+    --muted-foreground: 215 16% 50%;
 
-    --accent: 180 100% 50%;
-    --accent-foreground: 0 0% 0%;
+    /* Gentle mint/teal */
+    --accent: 168 58% 52%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 100% 50%;
+    /* Soft coral instead of harsh red */
+    --destructive: 0 72% 63%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 0%;
-    --input: 0 0% 100%;
-    --ring: 45 100% 51%;
+    --border: 214 28% 90%;
+    --input: 214 28% 90%;
+    --ring: 207 85% 55%;
 
-    --radius: 0rem;
+    --radius: 1rem;
 
     /* Canvas Colors */
-    --canvas-node-text: rgb(0, 0, 0);
-    --canvas-edge-text: rgb(60, 60, 60);
-    --canvas-grid-color: rgba(0, 0, 0, 0.15);
-    --canvas-grid-text: rgba(0, 0, 0, 0.6);
+    --canvas-node-text: rgb(40, 48, 66);
+    --canvas-edge-text: rgb(110, 120, 140);
+    --canvas-grid-color: rgba(70, 90, 130, 0.08);
+    --canvas-grid-text: rgba(70, 90, 130, 0.5);
   }
 
-  .light {
-    /* Alias for consistency - all modes use neo-brutalism */
+  .dark {
+    --background: 222 30% 12%;
+    --foreground: 210 30% 92%;
+
+    --card: 222 28% 16%;
+    --card-foreground: 210 30% 92%;
+
+    --popover: 222 28% 16%;
+    --popover-foreground: 210 30% 92%;
+
+    --primary: 207 85% 62%;
+    --primary-foreground: 222 40% 12%;
+
+    --secondary: 255 70% 74%;
+    --secondary-foreground: 222 40% 12%;
+
+    --muted: 222 22% 22%;
+    --muted-foreground: 215 20% 66%;
+
+    --accent: 168 58% 56%;
+    --accent-foreground: 222 40% 12%;
+
+    --destructive: 0 70% 66%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 222 18% 26%;
+    --input: 222 18% 26%;
+    --ring: 207 85% 62%;
+
+    --canvas-node-text: rgb(226, 232, 240);
+    --canvas-edge-text: rgb(148, 163, 184);
+    --canvas-grid-color: rgba(180, 200, 240, 0.08);
+    --canvas-grid-text: rgba(180, 200, 240, 0.4);
   }
 }
 
@@ -57,57 +91,52 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display uppercase tracking-widest;
-    font-family: 'Quantico', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 700;
-    letter-spacing: 0.05em;
+    letter-spacing: -0.01em;
   }
 }
 
 @layer utilities {
+  /* Soft, friendly card surfaces */
   .glass-panel {
-    @apply bg-background border-4 border-border;
-  }
-  
-  .glass-card {
-    @apply bg-background border-2 border-border hover:bg-muted transition-colors;
+    @apply bg-card border border-border rounded-2xl shadow-sm;
   }
 
-  /* Neo-brutalism doesn't use shadows or glows */
+  .glass-card {
+    @apply bg-card border border-border rounded-xl hover:bg-muted/50 transition-colors;
+  }
+
+  .soft-shadow {
+    box-shadow: 0 6px 24px -8px hsl(215 40% 50% / 0.18);
+  }
+
+  .soft-shadow-lg {
+    box-shadow: 0 18px 48px -12px hsl(215 40% 40% / 0.24);
+  }
+
   .neo-glow-cyan {
-    @apply border-4 border-primary;
+    @apply border border-primary/40;
   }
 
   .neo-glow-purple {
-    @apply border-4 border-secondary;
-  }
-
-  .text-shadow-cyan {
-    /* Removed - neo-brutalism doesn't use text shadows */
-  }
-
-  .text-shadow-purple {
-    /* Removed - neo-brutalism doesn't use text shadows */
-  }
-
-  .text-shadow-pink {
-    /* Removed - neo-brutalism doesn't use text shadows */
+    @apply border border-secondary/40;
   }
 
   .neo-brutalist-border {
-    @apply border-4 border-border;
+    @apply border border-border;
   }
 
   .nb-button {
-    @apply bg-primary text-primary-foreground border-4 border-border font-bold uppercase px-4 py-3;
+    @apply bg-primary text-primary-foreground rounded-full font-semibold px-5 py-2.5 transition-colors;
   }
 
   .nb-button:hover {
-    @apply bg-secondary text-secondary-foreground;
+    @apply bg-primary/90;
   }
 
   .nb-button:active {
@@ -115,31 +144,28 @@
   }
 
   .nb-card {
-    @apply bg-background border-4 border-border p-4;
+    @apply bg-card border border-border rounded-2xl p-4 shadow-sm;
   }
 
   .nb-input {
-    @apply bg-input text-foreground border-2 border-border font-sans;
+    @apply bg-input text-foreground border border-border rounded-lg font-sans;
   }
 }
 
 /* Animations */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .animate-fade-in {
-  animation: fadeIn 0.2s ease-out;
+  animation: fadeIn 0.3s ease-out;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -147,23 +173,23 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-muted rounded-full;
+  @apply bg-muted-foreground/30 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-primary;
+  @apply bg-primary/50;
 }
 
-/* Phase badges - Neo-brutalism */
+/* Phase badges — soft, rounded, friendly */
 .phase-badge {
-  @apply px-3 py-1 text-[11px] font-bold uppercase tracking-widest border-2 border-border;
+  @apply px-3 py-1 text-[11px] font-semibold rounded-full;
 }
 .phase-idle { @apply bg-muted text-muted-foreground; }
-.phase-generate { @apply bg-accent text-accent-foreground border-4; }
-.phase-aggregate { @apply bg-secondary text-secondary-foreground border-4; }
-.phase-update { @apply bg-green-400 text-foreground border-4; }
-.phase-analyze { @apply bg-blue-500 text-white border-4; }
+.phase-generate { @apply bg-accent/15 text-accent; }
+.phase-aggregate { @apply bg-secondary/15 text-secondary; }
+.phase-update { @apply bg-emerald-500/15 text-emerald-600; }
+.phase-analyze { @apply bg-primary/15 text-primary; }
 
-/* Neo-brutalism color utilities */
+/* Status color helpers */
 .neo-pink { @apply text-destructive; }
-.neo-green { @apply text-green-600; }
+.neo-green { @apply text-emerald-500; }
