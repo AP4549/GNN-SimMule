@@ -369,7 +369,6 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
       ctx.stroke();
       ctx.globalAlpha = 1;
       
-      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches || !document.documentElement.classList.contains('light');
       ctx.fillStyle = isDark ? '#ffffff' : '#1a202c';
       ctx.font = '800 10px Inter, sans-serif';
       ctx.textAlign = 'center';
@@ -634,7 +633,7 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
   };
 
   return (
-    <div className="flex flex-col h-full relative overflow-hidden bg-background/30">
+      <div className="flex flex-col h-full relative overflow-hidden bg-muted/30">
       {/* HUD Info Overlay */}
       <div className="absolute top-6 left-6 z-10 flex flex-col gap-3">
         <div className="bg-card/90 backdrop-blur-sm p-5 flex flex-col gap-4 rounded-2xl border border-border soft-shadow">
@@ -704,7 +703,7 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
       </div>
 
       {/* Canvas Area */}
-      <div ref={containerRef} className="flex-1 relative overflow-hidden m-4 border-4 border-border bg-background">
+      <div ref={containerRef} className="flex-1 relative overflow-hidden m-4 rounded-3xl border border-border bg-card soft-shadow">
         <div className="absolute inset-0 opacity-[0.02] pointer-events-none" 
              style={{ 
                backgroundImage: 'radial-gradient(circle at 2px 2px, hsla(180, 100%, 50%, 0.5) 1px, transparent 0)', 
@@ -719,7 +718,7 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
         
         {tooltip && (
           <div
-            className="fixed z-50 glass-panel rounded-lg px-5 py-4 text-xs pointer-events-none animate-fade-in shadow-[0_10px_40px_rgba(0,0,0,0.5)] border-2 border-primary/30"
+            className="fixed z-50 glass-panel rounded-2xl px-5 py-4 text-xs pointer-events-none animate-fade-in soft-shadow-lg border border-border"
             style={{
               left: tooltip.x + 20, top: tooltip.y + 20,
               maxWidth: 300,
