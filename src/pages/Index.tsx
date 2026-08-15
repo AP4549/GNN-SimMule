@@ -4,13 +4,14 @@ import GraphVisualizer from '@/components/GraphVisualizer';
 import AnalysisPanel from '@/components/AnalysisPanel';
 import { SCENARIOS, TYPE_COLORS, CH_COLORS } from '@/data/scenarios';
 import type { AnalysisData } from '@/components/GraphVisualizer';
-import { Shield, Info, Layers, ChevronRight, Activity, Sun, Moon, X } from 'lucide-react';
+import { Shield, Info, Layers, ChevronRight, Activity, Sun, Moon, X, Menu } from 'lucide-react';
 
 const Index = () => {
   const [scenario, setScenario] = useState('muleRing');
   const [analysisData, setAnalysisData] = useState<AnalysisData | null>(null);
   const [showGuide, setShowGuide] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleAnalysis = useCallback((data: AnalysisData | null) => {
     setAnalysisData(data);
@@ -29,8 +30,25 @@ const Index = () => {
 
   return (
     <div className="min-h-screen flex bg-background text-foreground font-sans selection:bg-primary/20 selection:text-primary overflow-hidden">
+      {/* Mobile overlay backdrop */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSidebarOpen(false)}
+            className="fixed inset-0 z-30 bg-foreground/30 backdrop-blur-sm lg:hidden"
+          />
+        )}
+      </AnimatePresence>
+
       {/* Sidebar */}
-      <aside className="w-64 bg-card border-r border-border flex flex-col z-20">
+      <aside
+        className={`w-64 bg-card border-r border-border flex flex-col z-40 fixed inset-y-0 left-0 transition-transform duration-300 lg:static lg:translate-x-0 ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}
+      >
         <div className="p-6 flex flex-col h-full">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-11 h-11 rounded-2xl bg-primary flex items-center justify-center soft-shadow">
@@ -49,7 +67,7 @@ const Index = () => {
                 {Object.entries(SCENARIOS).map(([key, s]) => (
                   <button
                     key={key}
-                    onClick={() => { setScenario(key); setAnalysisData(null); }}
+                    onClick={() => { setScenario(key); setAnalysisData(null); setSidebarOpen(false); }}
                     className={`w-full text-left px-4 py-3 text-sm flex items-center justify-between group font-medium rounded-xl transition-colors ${
                       key === scenario
                         ? 'bg-primary text-primary-foreground soft-shadow'
@@ -94,20 +112,27 @@ const Index = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col relative z-10 bg-background">
         {/* Top Header */}
-        <header className="h-16 px-8 flex items-center justify-between border-b border-border bg-background/80 backdrop-blur-sm">
-          <div className="flex items-center gap-4">
-            <h1 className="text-lg font-bold tracking-tight text-foreground">{sc?.name}</h1>
-            <div className="h-5 w-px bg-border" />
-            <p className="text-sm text-muted-foreground max-w-md line-clamp-1">{sc?.description}</p>
+        <header className="h-16 px-4 sm:px-8 flex items-center justify-between border-b border-border bg-background/80 backdrop-blur-sm">
+          <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="lg:hidden w-9 h-9 -ml-1 flex items-center justify-center rounded-xl text-foreground hover:bg-muted transition-colors shrink-0"
+              aria-label="Open menu"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+            <h1 className="text-base sm:text-lg font-bold tracking-tight text-foreground truncate">{sc?.name}</h1>
+            <div className="hidden md:block h-5 w-px bg-border" />
+            <p className="hidden md:block text-sm text-muted-foreground max-w-md line-clamp-1">{sc?.description}</p>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 shrink-0">
             <button
               onClick={() => setShowGuide(true)}
-              className="flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-full bg-primary/10 text-primary hover:bg-primary/15 transition-colors"
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 text-xs font-medium rounded-full bg-primary/10 text-primary hover:bg-primary/15 transition-colors"
             >
               <Info className="w-4 h-4" />
-              Guide
+              <span className="hidden sm:inline">Guide</span>
             </button>
           </div>
         </header>

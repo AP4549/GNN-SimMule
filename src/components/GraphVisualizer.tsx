@@ -304,16 +304,38 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
       const nodeColor = TYPE_COLORS[node.type] || (risk >= 8.0 ? '#E85D75' : risk >= 5.0 ? '#8B6BC4' : '#4DB8D8');
       const themeColor = nodeColor;
       const secondaryColor = nodeColor;
+
+      // Gentle breathing pulse (0..1), phase-shifted per node so they don't sync
+      const seed = (node.id.charCodeAt(0) || 0) * 0.7;
+      const pulse = 0.5 + 0.5 * Math.sin(Date.now() / 900 + seed);
       
-      // 1. External Glow (Aura)
+      // 1. External Glow (Aura) — softly breathes
       if (risk >= 5.0 || hovered || focused) {
+        const auraR = NODE_R + 12 + pulse * 8 + (hovered ? 6 : 0);
         ctx.beginPath();
-        ctx.arc(x, y, NODE_R + 10, 0, Math.PI * 2);
-        const aura = ctx.createRadialGradient(x, y, NODE_R, x, y, NODE_R + 15);
-        aura.addColorStop(0, `${themeColor}${hovered ? '25' : '15'}`);
+        ctx.arc(x, y, auraR, 0, Math.PI * 2);
+        const aura = ctx.createRadialGradient(x, y, NODE_R, x, y, auraR);
+        const inner = Math.round((hovered ? 42 : 26) + pulse * 24).toString(16).padStart(2, '0');
+        aura.addColorStop(0, `${themeColor}${inner}`);
         aura.addColorStop(1, 'transparent');
         ctx.fillStyle = aura;
         ctx.fill();
+      }
+
+      // 1b. Orbiting ring for critical nodes — a slow rotating dashed halo
+      if (risk >= 8.0) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate((Date.now() / 1400) % (Math.PI * 2));
+        ctx.beginPath();
+        ctx.arc(0, 0, NODE_R + 7, 0, Math.PI * 2);
+        ctx.setLineDash([4, 6]);
+        ctx.strokeStyle = themeColor;
+        ctx.globalAlpha = 0.5 + pulse * 0.3;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.restore();
       }
 
       // 2. Scanline effect for high risk
@@ -347,37 +369,42 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
       ctx.stroke();
       ctx.restore();
 
-      // 4. Focal Inner Shield (adaptive background)
+      // 4. Focal Inner Shield — a soft, friendly disc tinted with the entity color
+      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches || document.documentElement.classList.contains('dark');
       ctx.beginPath();
       ctx.arc(x, y, NODE_R - 3, 0, Math.PI * 2);
-      const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches || !document.documentElement.classList.contains('light');
-      ctx.fillStyle = isDark ? 'rgba(15, 23, 42, 0.85)' : 'rgba(240, 245, 250, 0.85)'; 
+      // Base so text stays legible
+      ctx.fillStyle = isDark ? '#1e2a3d' : '#ffffff';
+      ctx.fill();
+      // Colored wash on top (soft pastel look)
+      const fill = ctx.createRadialGradient(x - 4, y - 4, 2, x, y, NODE_R);
+      fill.addColorStop(0, `${themeColor}${isDark ? '55' : '33'}`);
+      fill.addColorStop(1, `${themeColor}${isDark ? '22' : '18'}`);
+      ctx.fillStyle = fill;
       ctx.fill();
 
-      // 5. Identity Badge
+      // 5. Identity Badge — solid color pill, breathes slightly
       const badgeR = 10;
       const bx = x - NODE_R * 0.7;
       const by = y - NODE_R * 0.7;
       
       ctx.beginPath();
       ctx.arc(bx, by, badgeR, 0, Math.PI * 2);
-      ctx.fillStyle = '#0f172a';
+      ctx.fillStyle = themeColor;
       ctx.fill();
-      ctx.strokeStyle = themeColor;
-      ctx.globalAlpha = 0.5;
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = isDark ? '#1e2a3d' : '#ffffff';
+      ctx.lineWidth = 2;
       ctx.stroke();
-      ctx.globalAlpha = 1;
       
-      ctx.fillStyle = isDark ? '#ffffff' : '#1a202c';
+      ctx.fillStyle = '#ffffff';
       ctx.font = '800 10px Inter, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(node.id.substring(0, 1).toUpperCase(), bx, by);
 
-      // 6. Central Metric (The Score)
-      ctx.fillStyle = focused ? (isDark ? '#ffffff' : '#000000') : themeColor;
-      ctx.font = '700 14px "JetBrains Mono", monospace';
+      // 6. Central Metric (The Score) — high-contrast neutral so it always reads
+      ctx.fillStyle = isDark ? '#f8fafc' : '#1a202c';
+      ctx.font = '700 15px "JetBrains Mono", monospace';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(risk.toFixed(1), x, y + 2);
