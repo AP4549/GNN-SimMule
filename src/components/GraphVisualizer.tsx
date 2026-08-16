@@ -376,10 +376,10 @@ export default function GraphVisualizer({ scenario, onAnalysis }: GraphVisualize
       // Base so text stays legible
       ctx.fillStyle = isDark ? '#1e2a3d' : '#ffffff';
       ctx.fill();
-      // Colored wash on top (soft pastel look)
+      // Colored wash on top (soft pastel look) — vibrant in dark mode so nodes never look black
       const fill = ctx.createRadialGradient(x - 4, y - 4, 2, x, y, NODE_R);
-      fill.addColorStop(0, `${themeColor}${isDark ? '55' : '33'}`);
-      fill.addColorStop(1, `${themeColor}${isDark ? '22' : '18'}`);
+      fill.addColorStop(0, `${themeColor}${isDark ? 'dd' : '44'}`);
+      fill.addColorStop(1, `${themeColor}${isDark ? '88' : '20'}`);
       ctx.fillStyle = fill;
       ctx.fill();
 

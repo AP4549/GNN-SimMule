@@ -51,9 +51,13 @@ const Index = () => {
       >
         <div className="p-6 flex flex-col h-full">
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-11 h-11 rounded-2xl bg-primary flex items-center justify-center soft-shadow">
+            <motion.div
+              animate={{ y: [0, -3, 0], rotate: [0, -4, 4, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              className="w-11 h-11 rounded-2xl bg-primary flex items-center justify-center soft-shadow"
+            >
               <Shield className="w-5 h-5 text-primary-foreground" />
-            </div>
+            </motion.div>
             <div className="flex flex-col">
               <span className="text-sm font-bold tracking-tight text-foreground">SimMule</span>
               <span className="text-[11px] text-muted-foreground">Fraud Intelligence</span>
@@ -64,9 +68,14 @@ const Index = () => {
             <div>
               <h3 className="text-[11px] font-semibold text-muted-foreground mb-3 tracking-wide px-1">Scenarios</h3>
               <div className="space-y-1.5">
-                {Object.entries(SCENARIOS).map(([key, s]) => (
-                  <button
+                {Object.entries(SCENARIOS).map(([key, s], i) => (
+                  <motion.button
                     key={key}
+                    initial={{ opacity: 0, x: -18 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.05 * i, type: 'spring', stiffness: 320, damping: 24 }}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.96 }}
                     onClick={() => { setScenario(key); setAnalysisData(null); setSidebarOpen(false); }}
                     className={`w-full text-left px-4 py-3 text-sm flex items-center justify-between group font-medium rounded-xl transition-colors ${
                       key === scenario
@@ -76,7 +85,7 @@ const Index = () => {
                   >
                     <span className="tracking-tight">{s.name}</span>
                     <ChevronRight className={`w-4 h-4 transition-transform ${key === scenario ? 'text-primary-foreground translate-x-0.5' : 'text-muted-foreground/40 group-hover:translate-x-0.5'}`} />
-                  </button>
+                  </motion.button>
                 ))}
               </div>
             </div>
@@ -137,11 +146,11 @@ const Index = () => {
           </div>
         </header>
 
-        <main className="flex-1 p-6 flex flex-col gap-6 overflow-hidden">
+        <main className="flex-1 p-4 sm:p-6 flex flex-col gap-6 overflow-y-auto lg:overflow-hidden">
           {/* Main Visualizer Area */}
-          <div className="flex-1 flex gap-6 min-h-0">
+          <div className="flex-1 flex flex-col lg:flex-row gap-6 min-h-0">
             {/* Visualizer Container */}
-            <div className="flex-1 bg-card border border-border rounded-3xl overflow-hidden relative group soft-shadow">
+            <div className="flex-1 min-h-[420px] bg-card border border-border rounded-3xl overflow-hidden relative group soft-shadow">
               <GraphVisualizer scenario={scenario} onAnalysis={handleAnalysis} />
 
               <AnimatePresence>
@@ -152,7 +161,7 @@ const Index = () => {
             </div>
 
             {/* Right Side Sidebar (Legend & Context) */}
-            <aside className="w-80 flex flex-col gap-5 overflow-y-auto pr-1">
+            <aside className="w-full lg:w-80 shrink-0 flex flex-col gap-5 lg:overflow-y-auto pr-1">
               <section className="bg-card border border-border rounded-2xl p-5 space-y-4 soft-shadow">
                 <div>
                   <h3 className="text-xs font-semibold text-foreground mb-2 tracking-wide">Network Context</h3>
@@ -225,14 +234,15 @@ const Index = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-foreground/30 backdrop-blur-sm"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-foreground/30 backdrop-blur-sm"
             onClick={(e) => { if (e.target === e.currentTarget) setShowGuide(false); }}
           >
             <motion.div
-              initial={{ scale: 0.96, opacity: 0, y: 20 }}
+              initial={{ scale: 0.9, opacity: 0, y: 30 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.96, opacity: 0, y: 20 }}
-              className="w-full max-w-3xl bg-card p-10 relative overflow-hidden rounded-3xl soft-shadow-lg"
+              exit={{ scale: 0.9, opacity: 0, y: 30 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 26 }}
+              className="w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-card p-6 sm:p-10 relative rounded-3xl soft-shadow-lg"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="absolute top-0 right-0 p-6">
